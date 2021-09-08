@@ -14,5 +14,6 @@ env/
 
 # My files
 creds.json
+conf.py
 *.sublime-project
 *.sublime-workspace
