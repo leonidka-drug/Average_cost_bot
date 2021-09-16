@@ -1,24 +1,23 @@
-from aiogram import executor
+from aiogram import executor, Dispatcher
+import logging
 
-from loader import bot
-from data.config import ADMINS
+from handlers import dp
+from data.config import ADMIN
 
-
-async def send_to_admins(dispatcher):
-    for admin in ADMINS:
-        await bot.send_message(chat_id=admin, text="БОТ запущен :)", )
+logger = logging.getLogger(__name__)
 
 
-async def on_shutdown(dispatcher):
-    await bot.close()
-
-
-async def on_startup(dispatcher):
-    await send_to_admins(dispatcher)
+async def send_to_admins(dispatcher: Dispatcher):
+    await dispatcher.bot.send_message(chat_id=ADMIN, text="БОТ запущен :)")
 
 
 if __name__ == '__main__':
-    from handlers import dp
+    logging.basicConfig(
+        level=logging.INFO,
+        format=u'%(filename)s:%(lineno)d #%(levelname)-8s [%(asctime)s] - %(name)s - %(message)s',
 
-    executor.start_polling(dp, on_startup=on_startup, on_shutdown=on_shutdown)
+    )
+    logger.info("Starting bot")
+
+    executor.start_polling(dp, on_startup=send_to_admins)
     

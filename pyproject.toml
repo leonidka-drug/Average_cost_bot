@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "avarage_cost_bot"
+name = "average_cost_bot"
 version = "0.1.0"
 description = ""
 authors = ["Leonid Krapchatov <hellsing1998nsk@gmail.com>"]
