@@ -17,3 +17,4 @@ creds.json
 conf.py
 *.sublime-project
 *.sublime-workspace
+*.db
