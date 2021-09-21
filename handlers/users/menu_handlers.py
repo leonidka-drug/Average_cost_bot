@@ -3,10 +3,10 @@ from aiogram.dispatcher.filters import Command
 
 from loader import dp
 from keyboards.default import menu
-from utils.google_sheets_data.calculations import calculate_cost
 from data.conf import GH_data
 from data.config import DATA_BASE_FILE
 from utils.db_api.sqlite import Database
+from utils.google_sheets.calculations import calculate_cost
 
 db = Database(DATA_BASE_FILE)
 
