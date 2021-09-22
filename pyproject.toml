@@ -12,6 +12,7 @@ google-api-python-client = "^2.19.1"
 oauth2client = "^4.1.3"
 
 [tool.poetry.dev-dependencies]
+unittest = "^0.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

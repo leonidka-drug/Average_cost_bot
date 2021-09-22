@@ -18,3 +18,4 @@ conf.py
 *.sublime-project
 *.sublime-workspace
 *.db
+!testing_db.db
