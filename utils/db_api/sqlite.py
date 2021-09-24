@@ -11,15 +11,25 @@ class Database:
         with self.connection:
             return self.cursor.execute('SELECT * FROM "users"').fetchall()
 
-    def get_object_id(self,
-                      table: str,
-                      parameter: str,
-                      value: [str, int]) -> int:
+    def get_entry(self,
+                  table: str,
+                  parameter: str,
+                  value: [str, int]) -> tuple:
         with self.connection:
             return self.cursor.execute(
-                f'SELECT "id" FROM "{table}"  WHERE "{parameter}" = ?',
+                f'SELECT * FROM "{table}"  WHERE "{parameter}" = ?',
                 (value,)
-            ).fetchone()[0]
+            ).fetchone()
+
+    def delete_entry(self,
+                     table: str,
+                     parameter: str,
+                     value: [str, int]) -> Cursor:
+        with self.connection:
+            return self.cursor.execute(
+                f'DELETE FROM "{table}" WHERE "{parameter}" = ?',
+                (value,)
+            )
 
     def user_exists(self, telegram_id: [str, int]) -> bool:
         with self.connection:
@@ -62,7 +72,7 @@ class Database:
             address: str = None
     ) -> Cursor:
         with self.connection:
-            user_id = self.get_object_id("users", "tg_id", telegram_id)
+            user_id = self.get_entry("users", "tg_id", telegram_id)[0]
             return self.cursor.execute(
                 '''INSERT INTO "hotels" 
                 ("user_id", "name", "num_of_rooms", "address") 
@@ -76,8 +86,8 @@ class Database:
             desired_total_profit: float
     ) -> Cursor:
         with self.connection:
-            user_id = self.get_object_id("users", "tg_id", telegram_id)
-            hotel_id = self.get_object_id("hotels", "user_id", user_id)
+            user_id = self.get_entry("users", "tg_id", telegram_id)[0]
+            hotel_id = self.get_entry("hotels", "user_id", user_id)[0]
             return self.cursor.execute(
                 '''INSERT INTO "season_info" 
                 ("hotel_id", "desired_total_profit") VALUES (?, ?)''',
@@ -89,9 +99,9 @@ class Database:
                                google_sheet_id: str,
                                google_sheet_range: str) -> Cursor:
         with self.connection:
-            user_id = self.get_object_id("users", "tg_id", telegram_id)
-            hotel_id = self.get_object_id("hotels", "user_id", user_id)
-            season_id = self.get_object_id("seasons_info", "hotel_id", hotel_id)
+            user_id = self.get_entry("users", "tg_id", telegram_id)[0]
+            hotel_id = self.get_entry("hotels", "user_id", user_id)[0]
+            season_id = self.get_entry("seasons_info", "hotel_id", hotel_id)[0]
             return self.cursor.execute(
                 '''INSERT INTO "google_sheets_info" 
                 ("season_id", "google_sheet_id", "google_sheet_range") 
