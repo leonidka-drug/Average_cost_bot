@@ -1,12 +1,4 @@
 BEGIN TRANSACTION;
-CREATE TABLE IF NOT EXISTS "google_sheets_info" (
-	"id"	INTEGER NOT NULL UNIQUE,
-	"season_id"	INTEGER NOT NULL,
-	"google_sheet_id"	TEXT,
-	"google_sheet_range"	TEXT,
-	PRIMARY KEY("id" AUTOINCREMENT),
-	FOREIGN KEY("season_id") REFERENCES "seasons_info"("id")
-);
 CREATE TABLE IF NOT EXISTS "hotels" (
 	"id"	INTEGER,
 	"user_id"	INTEGER,
@@ -20,6 +12,7 @@ CREATE TABLE IF NOT EXISTS "seasons_info" (
 	"id"	INTEGER NOT NULL UNIQUE,
 	"hotel_id"	INTEGER NOT NULL,
 	"desired_total_profit"	REAL,
+	"google_sheet_id"	TEXT,
 	PRIMARY KEY("id" AUTOINCREMENT),
 	FOREIGN KEY("hotel_id") REFERENCES "hotels"("id")
 );

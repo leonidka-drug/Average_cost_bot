@@ -70,20 +70,21 @@ class TestSqlite(unittest.TestCase):
         self.assertTrue(db.get_entry("users", "tg_id", 5454054520))
 
     def test_add_hotel(self):
-        random_user = choice(db.get_users())
-        telegram_id = random_user[1]
-        words = (("first ", "second ", "third "), ("big ", "small "),
-                 ("rare ", "common "),
-                 ("hotel", "guest house", "hostel", "motel"))
-        random_hotel_name = ""
-        for counter in (0, 1, 2, 3):
-            random_hotel_name += choice(words[counter])
-        self.assertIsInstance(db.add_hotel(telegram_id,
-                                           random_hotel_name,
-                                           randint(5, 15),
-                                           "Сочи, Озёрная 15"), Cursor)
-        self.assertEqual(db.get_entry("hotels", "user_id", random_user[0])[2],
-                         random_hotel_name)
+        # hotels = {5: "first test hotel", 10: "second test motel",
+        #           17: "third test guest house", 15: "fourth test hotel"}
+        # for telegram_id, hotel_name in hotels:
+        #     self.assertIsInstance(db.add_hotel(telegram_id,
+        #                                        hotel_name,
+        #                                        13,
+        #                                        "Сочи, Тестовая 404"), Cursor)
+        #     self.assertEqual(db.get_entry("hotels", "user_id",
+        #                                   db.get_entry())[2],
+        #                      random_hotel_name)
+        pass
+
+
+    def test_add_seasons_info(self):
+        pass
 
 
 if __name__ == '__main__':

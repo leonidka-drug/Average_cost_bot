@@ -83,28 +83,15 @@ class Database:
     def add_seasons_info(
             self,
             telegram_id: [str, int],
-            desired_total_profit: float
+            desired_total_profit: float,
+            google_sheet_id: str
     ) -> Cursor:
         with self.connection:
             user_id = self.get_entry("users", "tg_id", telegram_id)[0]
             hotel_id = self.get_entry("hotels", "user_id", user_id)[0]
             return self.cursor.execute(
                 '''INSERT INTO "season_info" 
-                ("hotel_id", "desired_total_profit") VALUES (?, ?)''',
-                (hotel_id, desired_total_profit)
-            )
-
-    def add_google_sheets_info(self,
-                               telegram_id: [str, int],
-                               google_sheet_id: str,
-                               google_sheet_range: str) -> Cursor:
-        with self.connection:
-            user_id = self.get_entry("users", "tg_id", telegram_id)[0]
-            hotel_id = self.get_entry("hotels", "user_id", user_id)[0]
-            season_id = self.get_entry("seasons_info", "hotel_id", hotel_id)[0]
-            return self.cursor.execute(
-                '''INSERT INTO "google_sheets_info" 
-                ("season_id", "google_sheet_id", "google_sheet_range") 
+                ("hotel_id", "desired_total_profit", "google_sheet_id")
                 VALUES (?, ?, ?)''',
-                (season_id, google_sheet_id, google_sheet_range)
+                (hotel_id, desired_total_profit, google_sheet_id)
             )
