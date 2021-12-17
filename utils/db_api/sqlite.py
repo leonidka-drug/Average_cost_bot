@@ -1,10 +1,10 @@
-import sqlite3
-from sqlite3 import Cursor
+from sqlite3 import connect, Cursor
+from typing import Union
 
 
 class Database:
     def __init__(self, database_file: str):
-        self.connection = sqlite3.connect(database_file)
+        self.connection = connect(database_file)
         self.cursor = self.connection.cursor()
 
     def get_users(self) -> list:
@@ -14,7 +14,7 @@ class Database:
     def get_entry(self,
                   table: str,
                   parameter: str,
-                  value: [str, int]) -> tuple:
+                  value: Union[str, int]) -> tuple:
         with self.connection:
             return self.cursor.execute(
                 f'SELECT * FROM "{table}"  WHERE "{parameter}" = ?',
@@ -24,14 +24,14 @@ class Database:
     def delete_entry(self,
                      table: str,
                      parameter: str,
-                     value: [str, int]) -> Cursor:
+                     value: Union[str, int]) -> Cursor:
         with self.connection:
             return self.cursor.execute(
                 f'DELETE FROM "{table}" WHERE "{parameter}" = ?',
                 (value,)
             )
 
-    def user_exists(self, telegram_id: [str, int]) -> bool:
+    def user_exists(self, telegram_id: Union[str, int]) -> bool:
         with self.connection:
             result = self.cursor.execute(
                 'SELECT * FROM "users" WHERE "tg_id" = ?',
@@ -47,7 +47,7 @@ class Database:
             ).fetchall()
 
     def add_user(self,
-                 telegram_id: [str, int],
+                 telegram_id: Union[str, int],
                  sub_status: bool = False) -> Cursor:
         with self.connection:
             return self.cursor.execute(
@@ -56,7 +56,7 @@ class Database:
             )
 
     def update_user_subscription(self,
-                                 telegram_id: [str, int],
+                                 telegram_id: Union[str, int],
                                  status: bool = True) -> Cursor:
         with self.connection:
             return self.cursor.execute(
@@ -64,13 +64,11 @@ class Database:
                 (status, telegram_id)
             )
 
-    def add_hotel(
-            self,
-            telegram_id: [str, int],
-            hotel_name: str,
-            number_of_rooms: int,
-            address: str = None
-    ) -> Cursor:
+    def add_hotel(self,
+                  telegram_id: Union[str, int],
+                  hotel_name: str,
+                  number_of_rooms: int,
+                  address: str = None) -> Cursor:
         with self.connection:
             user_id = self.get_entry("users", "tg_id", telegram_id)[0]
             return self.cursor.execute(
@@ -80,12 +78,10 @@ class Database:
                 (user_id, hotel_name, number_of_rooms, address)
             )
 
-    def add_seasons_info(
-            self,
-            telegram_id: [str, int],
-            desired_total_profit: float,
-            google_sheet_id: str
-    ) -> Cursor:
+    def add_seasons_info(self,
+                         telegram_id: Union[str, int],
+                         desired_total_profit: float,
+                         google_sheet_id: str) -> Cursor:
         with self.connection:
             user_id = self.get_entry("users", "tg_id", telegram_id)[0]
             hotel_id = self.get_entry("hotels", "user_id", user_id)[0]
