@@ -1,7 +1,9 @@
 from aiogram import executor, Dispatcher
 import logging
 
-from handlers import dp
+# from handlers import dp
+from loader import dp
+import handlers
 from data.config import ADMIN
 
 logger = logging.getLogger(__name__)
@@ -15,7 +17,6 @@ if __name__ == '__main__':
     logging.basicConfig(
         level=logging.INFO,
         format=u'%(filename)s:%(lineno)d #%(levelname)-8s [%(asctime)s] - %(name)s - %(message)s',
-
     )
     logger.info("Starting bot")
 

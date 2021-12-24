@@ -64,6 +64,15 @@ class Database:
                 (status, telegram_id)
             )
 
+    def update_user_url(self,
+                        telegram_id: Union[str, int],
+                        url: str) -> Cursor:
+        with self.connection:
+            return self.cursor.execute(
+                'UPDATE "users" SET "booking_url" = ? WHERE "tg_id" = ?',
+                (url, telegram_id)
+            )
+
     def add_hotel(self,
                   telegram_id: Union[str, int],
                   hotel_name: str,
